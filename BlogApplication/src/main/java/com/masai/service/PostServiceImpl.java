@@ -4,12 +4,14 @@ import java.awt.print.Pageable;
 import java.util.List;
 import java.util.Optional;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.masai.DTO.PostDTO;
 import com.masai.Dao.PostRepo;
 import com.masai.exception.DataIsEmpty;
 import com.masai.exception.PostIsNotFound;
@@ -20,6 +22,9 @@ public class PostServiceImpl implements PostService{
 
 	@Autowired
 	private PostRepo pDao;
+	
+	@Autowired
+	private ModelMapper modelMapper;
 
 	@Override
 	public List<Post> getAllPostData() throws DataIsEmpty{
@@ -27,6 +32,7 @@ public class PostServiceImpl implements PostService{
 		if(pDao.findAll()==null){
 			throw new DataIsEmpty("Data is Empty");
 		}else {
+			this.modelMapper.map(Post.class, PostDTO.class);
 			return pDao.findAll();
 		}
 	}

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.masai.Dao.CommentRepo;
 import com.masai.Dao.PostRepo;
+import com.masai.exception.CommentIsNotFound;
 import com.masai.exception.PostIsNotFound;
 import com.masai.model.Comment;
 import com.masai.model.Post;
@@ -22,7 +23,7 @@ public class CommentServiceImpl implements CommentService{
 	private PostRepo pDao;
 
 	@Override
-	public List<Comment> getAllComments(Integer postId) {
+	public List<Comment> getAllComments(Integer postId) throws PostIsNotFound{
 
 		Optional<Post> post = pDao.findById(postId);
 		
@@ -37,7 +38,7 @@ public class CommentServiceImpl implements CommentService{
 	}
 
 	@Override
-	public String createComment(Comment comment,Integer postId) {
+	public String createComment(Comment comment,Integer postId) throws PostIsNotFound{
 
 		Optional<Post> post = pDao.findById(postId);
 		
@@ -55,7 +56,7 @@ public class CommentServiceImpl implements CommentService{
 	}
 
 	@Override
-	public Comment getCommentsById(Integer postId, Integer Id) {
+	public Comment getCommentsById(Integer postId, Integer Id) throws PostIsNotFound{
 		Optional<Post> post = pDao.findById(postId);
 		
 		if(post.isEmpty()) {
@@ -77,7 +78,7 @@ public class CommentServiceImpl implements CommentService{
 	}
 
 	@Override
-	public String updateComment(Integer postId, Integer Id) {
+	public String updateComment(Integer postId, Integer Id) throws PostIsNotFound{
 		Optional<Post> post = pDao.findById(postId);
 		if(post.isEmpty()) {
 			throw new PostIsNotFound("Post is not found");
@@ -102,7 +103,7 @@ public class CommentServiceImpl implements CommentService{
 	}
 
 	@Override
-	public String deleteComment(Integer postId, Integer Id) {
+	public String deleteComment(Integer postId, Integer Id) throws CommentIsNotFound{
 		Optional<Post> post = pDao.findById(postId);
 		if(post.isEmpty()) {
 			throw new PostIsNotFound("Post is not found");
@@ -110,7 +111,7 @@ public class CommentServiceImpl implements CommentService{
 			
 			Optional<Comment> comment = cDao.findById(Id);
 			if(comment.isEmpty()) {
-				throw new PostIsNotFound("Comment is not found");
+				throw new CommentIsNotFound("Comment is not found");
 			}else {
 				cDao.deleteById(Id);
 			}
