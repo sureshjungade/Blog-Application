@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.masai.DTO.PostDTO;
 import com.masai.model.Post;
 import com.masai.service.PostService;
 
@@ -28,16 +30,25 @@ public class PostController {
 	@Autowired
 	private PostService pService;
 	
+	@Autowired
+	private ModelMapper modelMapper;
+	
 	@GetMapping("/")
 	public ResponseEntity<List<Post>> getAllPost(){
+		List<Post> post = pService.getAllPostData();
+		
+		
 		
 		return new ResponseEntity<>(pService.getAllPostData(),HttpStatus.OK);
 	}
 	
 	@GetMapping("/{Id}")
-	public ResponseEntity<Post> getPostById(@Valid @PathVariable Integer Id){
+	public ResponseEntity<PostDTO> getPostById(@Valid @PathVariable Integer Id){
 		
-		return new ResponseEntity<>(pService.getPostDataById(Id),HttpStatus.OK);
+		Post post = pService.getPostDataById(Id);
+		PostDTO postDTO =  this.modelMapper.map(post, PostDTO.class);
+		
+		return new ResponseEntity<>(postDTO,HttpStatus.OK);
 	}
 	
 	@PostMapping("/")
@@ -47,9 +58,12 @@ public class PostController {
 	}
 	
 	@PutMapping("/{Id}")
-	public ResponseEntity<Post> updatePost(@Valid @PathVariable Integer Id){
+	public ResponseEntity<PostDTO> updatePost(@Valid @PathVariable Integer Id){
 		
-		return new ResponseEntity<>(pService.updatePostDataById(Id),HttpStatus.OK);
+		Post post = pService.updatePostDataById(Id);
+		PostDTO postDTO =  this.modelMapper.map(post, PostDTO.class);
+		
+		return new ResponseEntity<>(postDTO,HttpStatus.OK);
 	}
 	
 	@DeleteMapping("/{Id}")

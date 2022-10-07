@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +17,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.masai.DTO.CommentDTO;
+import com.masai.DTO.PostDTO;
 import com.masai.model.Comment;
+import com.masai.model.Post;
 import com.masai.service.CommentService;
 
 @RestController
@@ -26,6 +30,8 @@ public class CommentController {
 	@Autowired
 	private CommentService cService;
 	
+	@Autowired
+	private ModelMapper modelMapper;
 	
 	@GetMapping("/{Id}/comments/")
 	public ResponseEntity<List<Comment>> getAllComment(@Valid @PathVariable Integer Id){
@@ -34,9 +40,13 @@ public class CommentController {
 	}
 	
 	@GetMapping("/{postId}/comments/{Id}")
-	public ResponseEntity<Comment> getAllComment(@Valid @PathVariable("postId") Integer postId,@PathVariable("Id") Integer Id){
+	public ResponseEntity<CommentDTO> getAllComment(@Valid @PathVariable("postId") Integer postId,@PathVariable("Id") Integer Id){
 		
-		return new ResponseEntity<>(cService.getCommentsById(postId, Id),HttpStatus.CREATED);
+		Comment comment = cService.getCommentsById(postId, Id);
+		CommentDTO commentDTO =  this.modelMapper.map(comment, CommentDTO.class);
+		
+		
+		return new ResponseEntity<>(commentDTO,HttpStatus.CREATED);
 	}
 	
 	

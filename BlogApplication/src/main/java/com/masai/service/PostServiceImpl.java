@@ -23,8 +23,7 @@ public class PostServiceImpl implements PostService{
 	@Autowired
 	private PostRepo pDao;
 	
-	@Autowired
-	private ModelMapper modelMapper;
+	
 
 	@Override
 	public List<Post> getAllPostData() throws DataIsEmpty{
@@ -32,7 +31,7 @@ public class PostServiceImpl implements PostService{
 		if(pDao.findAll()==null){
 			throw new DataIsEmpty("Data is Empty");
 		}else {
-			this.modelMapper.map(Post.class, PostDTO.class);
+			
 			return pDao.findAll();
 		}
 	}
