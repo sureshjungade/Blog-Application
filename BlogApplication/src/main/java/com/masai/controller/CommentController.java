@@ -30,23 +30,23 @@ public class CommentController {
 	@Autowired
 	private CommentService cService;
 	
-	@Autowired
-	private ModelMapper modelMapper;
+//	@Autowired
+//	private ModelMapper modelMapper;
 	
 	@GetMapping("/{Id}/comments/")
-	public ResponseEntity<List<Comment>> getAllComment(@Valid @PathVariable Integer Id){
+	public ResponseEntity<List<Comment>> getAllComment( @PathVariable Integer Id){
 		
 		return new ResponseEntity<>(cService.getAllComments(Id),HttpStatus.CREATED);
 	}
 	
 	@GetMapping("/{postId}/comments/{Id}")
-	public ResponseEntity<CommentDTO> getAllComment(@Valid @PathVariable("postId") Integer postId,@PathVariable("Id") Integer Id){
+	public ResponseEntity<Comment> getAllComment( @PathVariable("postId") Integer postId,@PathVariable("Id") Integer Id){
 		
-		Comment comment = cService.getCommentsById(postId, Id);
-		CommentDTO commentDTO =  this.modelMapper.map(comment, CommentDTO.class);
+//		Comment comment = cService.getCommentsById(postId, Id);
+//		CommentDTO commentDTO =  this.modelMapper.map(comment, CommentDTO.class);
 		
 		
-		return new ResponseEntity<>(commentDTO,HttpStatus.CREATED);
+		return new ResponseEntity<>(cService.getCommentsById(postId, Id),HttpStatus.CREATED);
 	}
 	
 	
@@ -57,13 +57,13 @@ public class CommentController {
 	}
 	
 	@PutMapping("/{postId}/comments/{Id}")
-	public ResponseEntity<String> updatePost(@Valid @PathVariable("postId") Integer postId,@PathVariable("Id") Integer Id){
+	public ResponseEntity<String> updatePost(@PathVariable("postId") Integer postId,@PathVariable("Id") Integer Id){
 		
 		return new ResponseEntity<>(cService.updateComment(postId, Id),HttpStatus.CREATED);
 	}
 	
 	@DeleteMapping("/{postId}/comments/{Id}")
-	public ResponseEntity<String> deletePost(@Valid @PathVariable("postId") Integer postId,@PathVariable("Id") Integer Id){
+	public ResponseEntity<String> deletePost(@PathVariable("postId") Integer postId,@PathVariable("Id") Integer Id){
 		
 		return new ResponseEntity<>(cService.deleteComment(postId, Id),HttpStatus.CREATED);
 	}

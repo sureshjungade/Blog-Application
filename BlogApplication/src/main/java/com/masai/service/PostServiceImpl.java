@@ -27,7 +27,7 @@ public class PostServiceImpl implements PostService{
 
 	@Override
 	public List<Post> getAllPostData() throws DataIsEmpty{
-		
+		System.out.println("impl");
 		if(pDao.findAll()==null){
 			throw new DataIsEmpty("Data is Empty");
 		}else {

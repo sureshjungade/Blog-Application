@@ -30,25 +30,25 @@ public class PostController {
 	@Autowired
 	private PostService pService;
 	
-	@Autowired
-	private ModelMapper modelMapper;
+//	@Autowired
+//	private ModelMapper modelMapper;
 	
 	@GetMapping("/")
 	public ResponseEntity<List<Post>> getAllPost(){
-		List<Post> post = pService.getAllPostData();
+		//List<Post> post = pService.getAllPostData();
 		
-		
+		System.out.println("Hii");
 		
 		return new ResponseEntity<>(pService.getAllPostData(),HttpStatus.OK);
 	}
 	
 	@GetMapping("/{Id}")
-	public ResponseEntity<PostDTO> getPostById(@Valid @PathVariable Integer Id){
+	public ResponseEntity<Post> getPostById(@PathVariable Integer Id){
 		
-		Post post = pService.getPostDataById(Id);
-		PostDTO postDTO =  this.modelMapper.map(post, PostDTO.class);
+//		Post post = pService.getPostDataById(Id);
+//		PostDTO postDTO =  this.modelMapper.map(post, PostDTO.class);
 		
-		return new ResponseEntity<>(postDTO,HttpStatus.OK);
+		return new ResponseEntity<>(pService.getPostDataById(Id),HttpStatus.OK);
 	}
 	
 	@PostMapping("/")
@@ -58,23 +58,23 @@ public class PostController {
 	}
 	
 	@PutMapping("/{Id}")
-	public ResponseEntity<PostDTO> updatePost(@Valid @PathVariable Integer Id){
+	public ResponseEntity<Post> updatePost(@PathVariable Integer Id){
 		
-		Post post = pService.updatePostDataById(Id);
-		PostDTO postDTO =  this.modelMapper.map(post, PostDTO.class);
+//		Post post = pService.updatePostDataById(Id);
+//		PostDTO postDTO =  this.modelMapper.map(post, PostDTO.class);
 		
-		return new ResponseEntity<>(postDTO,HttpStatus.OK);
+		return new ResponseEntity<>(pService.updatePostDataById(Id),HttpStatus.OK);
 	}
 	
 	@DeleteMapping("/{Id}")
-	public ResponseEntity<String> deletePostById(@Valid @PathVariable Integer Id){
+	public ResponseEntity<String> deletePostById(@PathVariable Integer Id){
 		
 		return new ResponseEntity<>(pService.deletePostDataById(Id),HttpStatus.OK);
 	}
 	
 	//http://localhost:8088/api/posts/paginationAndSorting/1?pageSize=2&sortingField=title&sortingDirection=DESC
 	@GetMapping("/paginationAndSorting")
-	public ResponseEntity<Page<Post>> paginationAndSorting(@Valid @RequestParam(required = false, defaultValue = "1") Integer pageNo,@RequestParam(required = false, defaultValue = "10")Integer pageSize, @RequestParam(required = false, defaultValue = "title")String sortingField, @RequestParam(required = false, defaultValue = "ASC") String sortingDirection){
+	public ResponseEntity<Page<Post>> paginationAndSorting(@RequestParam(required = false, defaultValue = "1") Integer pageNo,@RequestParam(required = false, defaultValue = "10")Integer pageSize, @RequestParam(required = false, defaultValue = "title")String sortingField, @RequestParam(required = false, defaultValue = "ASC") String sortingDirection){
 		
 		return new ResponseEntity<>(pService.paginationAndSorting(pageNo, pageSize, sortingField, sortingDirection),HttpStatus.OK);
 	}
